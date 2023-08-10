@@ -1,17 +1,13 @@
 import fastapi
 import uvicorn
-from starlette.requests import Request
-from starlette.templating import Jinja2Templates
+
 from starlette.staticfiles import StaticFiles
+
+from views import home
 
 api = fastapi.FastAPI()
 api.mount("/static", StaticFiles(directory="static"), name="static")
-templates = Jinja2Templates("templates")
-
-
-@api.get("/")
-def index(request: Request):
-    return templates.TemplateResponse("home/index.html", {"request": request})
+api.include_router(home.router)
 
 
 if __name__ == "__main__":
