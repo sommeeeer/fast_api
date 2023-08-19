@@ -3,7 +3,9 @@ from dotenv import load_dotenv
 import os
 import httpx
 
+
 from models.validation_error import ValidationError
+from infrastructure import weather_cache
 
 load_dotenv()
 
@@ -12,7 +14,11 @@ OPENWEATHERMAP_API_KEY = os.getenv("OPENWEATHERMAP_API_KEY")
 if not OPENWEATHERMAP_API_KEY:
     raise Exception("NO VALID API KEY")
 
+
 async def get_report(city: str, state: Optional[str], country: str, units: str) -> dict:
+    if forecast := weather_cache.get_weather(city, state, country, units):
+        return forecast
+
     if state:
         q = f"{city},{state},{country}"
     else:
@@ -28,5 +34,6 @@ async def get_report(city: str, state: Optional[str], country: str, units: str) 
 
     data = response.json()
     forecast = data["main"]
-    return forecast
 
+    weather_cache.set_weather(city, state, country, units, forecast)
+    return forecast
