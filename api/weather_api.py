@@ -17,11 +17,9 @@ async def weather(
 ):
     try:
         city, state, country, units = validate_units(
-            loc.city, loc.state, loc.country, loc.units
-        )
-        report = await openweather_service.get_report(
             loc.city, loc.state, loc.country, units
         )
+        report = await openweather_service.get_report(city, state, country, units)
     except ValidationError as ve:
         return fastapi.Response(content=ve.error_msg, status_code=ve.status_code)
     except Exception as e:
@@ -29,5 +27,5 @@ async def weather(
         return fastapi.Response(
             content="Error processing your request", status_code=500
         )
-        
+
     return report
