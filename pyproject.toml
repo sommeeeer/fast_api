@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "fast-api"
+version = "0.1.0"
+description = "Open Weather Map API"
+authors = ["magnus <magnus@dahleide.com>"]
+license = "MIT"
+readme = "README.md"
+packages = [{include = "fast_api"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+fastapi = {extras = ["all"], version = "^0.101.1"}
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
