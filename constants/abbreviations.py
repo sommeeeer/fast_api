@@ -1,4 +1,4 @@
-ALPHA_2_CODES = (
+COUNTRY_CODES = (
     "AF",
     "AX",
     "AL",
@@ -249,7 +249,7 @@ ALPHA_2_CODES = (
     "ZW",
 )
 
-STATES_CODES = (
+US_STATES_CODES = (
     "AL",
     "AK",
     "AZ",
