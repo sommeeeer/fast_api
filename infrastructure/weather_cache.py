@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import Optional, Tuple
 
 
@@ -18,7 +18,7 @@ def get_weather(
 
     last_seen = data["time"]
     dt = datetime.now() - last_seen
-    if dt / datetime.timedelta(minutes=60) < lifetime_in_hours:
+    if dt / timedelta(minutes=60) < lifetime_in_hours:
         return data["value"]
 
     del __cache[key]
@@ -56,5 +56,5 @@ def _clean_cache():
     for key, data in list(__cache.items()):
         last_seen = data.get("time")
         dt = datetime.now() - last_seen
-        if dt / datetime.timedelta(minutes=60) > lifetime_in_hours:
+        if dt / timedelta(minutes=60) > lifetime_in_hours:
             del __cache[key]
