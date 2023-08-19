@@ -46,11 +46,9 @@ def validate_units(
     city = city.strip().lower()
 
     if not country:
-        country = "US"
-    else:
         country = country.strip().upper()
 
-    if country not in COUNTRY_CODES:
+    if country and country not in COUNTRY_CODES:
         error = f"Invalid country: {country}. It must be a two letter abbreviation such as US or GB."
         raise ValidationError(error_msg=error, status_code=400)
 
