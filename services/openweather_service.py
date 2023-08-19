@@ -1,8 +1,9 @@
-from typing import Optional
+from typing import Optional, Tuple
 from dotenv import load_dotenv
 import os
 import httpx
-
+from constants.abbreviations import COUNTRY_CODES, US_STATES_CODES
+from constants.units import VALID_OPEN_WEATHER_API_UNITS
 
 from models.validation_error import ValidationError
 from infrastructure import weather_cache
@@ -37,3 +38,36 @@ async def get_report(city: str, state: Optional[str], country: str, units: str) 
 
     weather_cache.set_weather(city, state, country, units, forecast)
     return forecast
+
+
+def validate_units(
+    city: str, state: Optional[str], country: Optional[str], units: str
+) -> Tuple[str, Optional[str], str, str]:
+    city = city.strip().lower()
+
+    if not country:
+        country = "US"
+    else:
+        country = country.strip().upper()
+
+    if country not in COUNTRY_CODES:
+        error = f"Invalid country: {country}. It must be a two letter abbreviation such as US or GB."
+        raise ValidationError(error_msg=error, status_code=400)
+
+    if state:
+        state = state.strip().upper()
+
+    if state and state not in US_STATES_CODES:
+        error = f"Invalid state: {state}. It must be a two letter abbreviation such as CA or TX."
+        raise ValidationError(error_msg=error, status_code=400)
+
+    if units:
+        units = units.lower().strip()
+
+    if units not in VALID_OPEN_WEATHER_API_UNITS:
+        error = (
+            f"Invalid units: {units}. It must be one of {VALID_OPEN_WEATHER_API_UNITS}"
+        )
+        raise ValidationError(error_msg=error, status_code=400)
+
+    return city, state, country, units
