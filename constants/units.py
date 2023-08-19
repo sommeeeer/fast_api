@@ -1,0 +1,1 @@
+VALID_OPEN_WEATHER_API_UNITS = 'standard', 'metric', 'imperial'
